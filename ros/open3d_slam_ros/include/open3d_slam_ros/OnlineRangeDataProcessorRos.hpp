@@ -6,9 +6,9 @@
  */
 
 #pragma once
-#include <nav_msgs/Odometry.h>
-#include <ros/ros.h>
-#include <sensor_msgs/PointCloud2.h>
+#include <nav_msgs/msg/Odometry.hpp>
+#include "rclcpp/rclcpp.hpp"
+#include <sensor_msgs/msg/PointCloud2.hpp>
 #include <tf2_ros/transform_broadcaster.h>
 #include <memory>
 #include "open3d_slam/SlamWrapper.hpp"
@@ -28,7 +28,7 @@ class OnlineRangeDataProcessorRos : public DataProcessorRos {
   void processMeasurement(const PointCloud& cloud, const Time& timestamp) override;
 
  private:
-  void cloudCallback(const sensor_msgs::PointCloud2ConstPtr& msg);
+  void cloudCallback(const sensor_msgs::msg::PointCloud2ConstPtr& msg);
 
   ros::Subscriber cloudSubscriber_;
 };

@@ -6,11 +6,11 @@
  */
 
 #include "open3d_slam_ros/RosbagRangeDataProcessorRos.hpp"
-#include "open3d_conversions/open3d_conversions.h"
+#include "open3d_conversions/open3d_conversions.hpp"
 #include "open3d_slam_ros/SlamWrapperRos.hpp"
 
-#include <ros/ros.h>
-#include <sensor_msgs/PointCloud2.h>
+#include "rclcpp/rclcpp.hpp"
+#include <sensor_msgs/msg/point_cloud2.h>
 
 #include <rosbag/view.h>
 #include "open3d_slam/frames.hpp"
@@ -19,23 +19,24 @@
 
 namespace o3d_slam {
 
-RosbagRangeDataProcessorRos::RosbagRangeDataProcessorRos(ros::NodeHandlePtr nh) : BASE(nh) {}
+RosbagRangeDataProcessorRos::RosbagRangeDataProcessorRos(rclcpp::Node* nh) : BASE(nh) {}
 
 void RosbagRangeDataProcessorRos::initialize() {
   initCommonRosStuff();
   slam_ = std::make_shared<SlamWrapperRos>(nh_);
   slam_->loadParametersAndInitialize();
-  rosbagFilename_ = nh_->param<std::string>("rosbag_filepath", "");
+  nh_->declare_parameter("rosbag_filepath", "");
+  rosbagFilename_ = nh_->get_parameter("rosbag_filepath").as_string();
   std::cout << "Reading from rosbag: " << rosbagFilename_ << "\n";
 }
 
 void RosbagRangeDataProcessorRos::startProcessing() {
   slam_->startWorkers();
 
-  rosbag::Bag bag;
-  bag.open(rosbagFilename_, rosbag::bagmode::Read);
-  readRosbag(bag);
-  bag.close();
+  rosbag2_cpp::Reader reader_;
+  reader_.open(rosbagFilename_);
+  readRosbag(reader_);
+  reader_.close();
   ros::spin();
   slam_->stopWorkers();
 }
@@ -49,12 +50,12 @@ void RosbagRangeDataProcessorRos::processMeasurement(const PointCloud& cloud, co
   }
 }
 
-void RosbagRangeDataProcessorRos::readRosbag(const rosbag::Bag& bag) {
+void RosbagRangeDataProcessorRos::readRosbag(const rosbag2_cpp::Reader& bag) {
   std::vector<std::string> topics;
   topics.push_back(cloudTopic_);
   rosbag::View view(bag, rosbag::TopicQuery(topics));
   Timer rosbagTimer;
-  ros::Time lastTimestamp;
+  rclcpp::Time lastTimestamp;
   bool isFirstMessage = true;
   Timer rosbagProcessingTimer;
   BOOST_FOREACH (rosbag::MessageInstance const m, view) {
