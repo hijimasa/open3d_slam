@@ -20,4 +20,7 @@
   <depend>open3d</depend>
   <depend>eigen</depend>
 
+  <export>
+    <build_type>ament_cmake</build_type>
+  </export>
 </package>

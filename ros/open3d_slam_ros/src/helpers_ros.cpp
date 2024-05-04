@@ -159,8 +159,8 @@ void drawAxes(const Eigen::Vector3d& p, const Eigen::Quaterniond& q, double scal
 }
 
 rclcpp::Time toRos(Time time) {
-  int64_t uts_timestamp = toUniversal(time);
-  int64_t ns_since_unix_epoch = (uts_timestamp - kUtsEpochOffsetFromUnixEpochInSeconds * 10000000ll) * 100ll;
+  uint64_t uts_timestamp = toUniversal(time);
+  uint64_t ns_since_unix_epoch = (uts_timestamp - kUtsEpochOffsetFromUnixEpochInSeconds * 10000000ll) * 100ll;
   ::rclcpp::Time ros_time;
   if (ns_since_unix_epoch < 0) {
     std::cerr << "ERROR: nanoseconds since unix epoch is: " << ns_since_unix_epoch << " which is impossible!!!! \n";
@@ -176,7 +176,7 @@ rclcpp::Time toRos(Time time) {
 Time fromRos(const ::rclcpp::Time& time) {
   // The epoch of the ICU Universal Time Scale is "0001-01-01 00:00:00.0 +0000",
   // exactly 719162 days before the Unix epoch.
-  return fromUniversal((time.nanoseconds() +50) / 100);  // + 50 to get the rounding correct.
+  return fromUniversal((time.nanoseconds() + kUtsEpochOffsetFromUnixEpochInSeconds * 1000000000 +50) / 100);  // + 50 to get the rounding correct.
 }
 
 } /* namespace o3d_slam */

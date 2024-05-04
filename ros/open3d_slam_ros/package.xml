@@ -34,5 +34,7 @@
   <depend>open3d_slam_lua_io</depend>
   <depend>open3d_slam_msgs</depend>
 
-
+  <export>
+    <build_type>ament_cmake</build_type>
+  </export>
 </package>

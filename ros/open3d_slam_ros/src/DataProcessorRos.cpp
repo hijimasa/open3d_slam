@@ -13,7 +13,7 @@
 
 namespace o3d_slam {
 
-DataProcessorRos::DataProcessorRos(rclcpp::Node* nh) : nh_(nh) {}
+DataProcessorRos::DataProcessorRos(rclcpp::Node* nh, rclcpp::executors::SingleThreadedExecutor* executor) : nh_(nh), executor_(executor) {}
 
 void DataProcessorRos::initCommonRosStuff() {
   nh_->declare_parameter("cloud_topic", "");

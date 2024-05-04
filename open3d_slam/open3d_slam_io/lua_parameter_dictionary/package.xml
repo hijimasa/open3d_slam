@@ -12,4 +12,7 @@
   <depend>rclcpp</depend>
   <depend>ament_index_cpp</depend>
   <test_depend>gtest</test_depend>
+  <export>
+    <build_type>ament_cmake</build_type>
+  </export>
 </package>

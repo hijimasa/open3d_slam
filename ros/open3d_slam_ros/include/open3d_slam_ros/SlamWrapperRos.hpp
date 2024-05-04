@@ -26,7 +26,7 @@ class SlamWrapperRos : public SlamWrapper {
   using BASE = SlamWrapper;
 
  public:
-  SlamWrapperRos(rclcpp::Node* nh);
+  SlamWrapperRos(rclcpp::Node* nh, rclcpp::executors::SingleThreadedExecutor* executor);
   ~SlamWrapperRos() override;
 
   void saveMapCallback(const std::shared_ptr<open3d_slam_msgs::srv::SaveMap::Request> req,         const std::shared_ptr<open3d_slam_msgs::srv::SaveMap::Response> res);
@@ -44,6 +44,7 @@ class SlamWrapperRos : public SlamWrapper {
   void publishMapToOdomTf(const Time& time);
 
   rclcpp::Node* nh_;
+  rclcpp::executors::SingleThreadedExecutor* executor_;
   std::shared_ptr<tf2_ros::TransformBroadcaster> tfBroadcaster_;
   rclcpp::Publisher<sensor_msgs::msg::PointCloud2>::SharedPtr odometryInputPub_;
   rclcpp::Publisher<sensor_msgs::msg::PointCloud2>::SharedPtr mappingInputPub_;

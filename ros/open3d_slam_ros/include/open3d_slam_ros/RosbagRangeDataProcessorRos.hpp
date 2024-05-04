@@ -21,7 +21,7 @@ class RosbagRangeDataProcessorRos : public DataProcessorRos {
   using BASE = DataProcessorRos;
 
  public:
-  RosbagRangeDataProcessorRos(rclcpp::Node* nh);
+  RosbagRangeDataProcessorRos(rclcpp::Node* nh, rclcpp::executors::SingleThreadedExecutor* executor);
   ~RosbagRangeDataProcessorRos() override = default;
 
   void initialize() override;
@@ -29,10 +29,12 @@ class RosbagRangeDataProcessorRos : public DataProcessorRos {
   void processMeasurement(const PointCloud& cloud, const Time& timestamp) override;
 
  private:
-  void cloudCallback(const sensor_msgs::msg::PointCloud2ConstPtr& msg);
-  void readRosbag(const rosbag2_cpp::Reader& bag);
+  void cloudCallback(const sensor_msgs::msg::PointCloud2::SharedPtr msg);
+  void readRosbag(rosbag2_cpp::Reader& bag);
   
   std::string rosbagFilename_;
+
+  rclcpp::Serialization<sensor_msgs::msg::PointCloud2> serialization_;
 };
 
 }  // namespace o3d_slam

@@ -37,7 +37,7 @@ namespace {
 using namespace o3d_slam::frames;
 }
 
-SlamWrapperRos::SlamWrapperRos(rclcpp::Node* nh) : BASE(), nh_(nh) {
+SlamWrapperRos::SlamWrapperRos(rclcpp::Node* nh, rclcpp::executors::SingleThreadedExecutor* executor) : BASE(), nh_(nh), executor_(executor) {
   tfBroadcaster_ = std::make_shared<tf2_ros::TransformBroadcaster>(nh_);
   prevPublishedTimeScanToScan_ = fromUniversal(0);
   prevPublishedTimeScanToMap_ = fromUniversal(0);
@@ -110,9 +110,7 @@ void SlamWrapperRos::odomPublisherWorker() {
       prevPublishedTimeScanToMapOdom_ = latestScanToMap;
     }
 
-    rclcpp::executors::SingleThreadedExecutor executor;
-    executor.add_node(nh_->get_node_base_interface());
-    executor.spin_some();
+    //executor_->spin_some();
     r.sleep();
   }
 }
@@ -137,9 +135,7 @@ void SlamWrapperRos::tfWorker() {
       prevPublishedTimeScanToMap_ = latestScanToMap;
     }
 
-    rclcpp::executors::SingleThreadedExecutor executor;
-    executor.add_node(nh_->get_node_base_interface());
-    executor.spin_some();
+    //executor_->spin_some();
     r.sleep();
   }
 }
@@ -158,9 +154,7 @@ void SlamWrapperRos::visualizationWorker() {
       publishMaps(scanToMapTimestamp);
     }
 
-    rclcpp::executors::SingleThreadedExecutor executor;
-    executor.add_node(nh_->get_node_base_interface());
-    executor.spin_some();
+    //executor_->spin_some();
     r.sleep();
   }
 }
@@ -192,9 +186,9 @@ void SlamWrapperRos::loadParametersAndInitialize() {
   nh_->declare_parameter("map_saving_folder", folderPath_);
   mapSavingFolderPath_ = nh_->get_parameter("map_saving_folder").as_string();
 
-  nh_->declare_parameter("parameter_folder_path", "");
+  //nh_->declare_parameter("parameter_folder_path", "");
   const std::string paramFolderPath = nh_->get_parameter("parameter_folder_path").as_string();
-  nh_->declare_parameter("parameter_filename", "");
+  //nh_->declare_parameter("parameter_filename", "");
   const std::string paramFilename = nh_->get_parameter("parameter_filename").as_string();
   SlamParameters params;
   io_lua::loadParameters(paramFolderPath, paramFilename, &params_);

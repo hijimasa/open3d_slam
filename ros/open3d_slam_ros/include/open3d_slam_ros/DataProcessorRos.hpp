@@ -17,7 +17,7 @@ namespace o3d_slam {
 
 class DataProcessorRos {
  public:
-  DataProcessorRos(rclcpp::Node* nh);
+  DataProcessorRos(rclcpp::Node* nh, rclcpp::executors::SingleThreadedExecutor* executor);
   virtual ~DataProcessorRos() = default;
 
   virtual void initialize() = 0;
@@ -36,6 +36,7 @@ class DataProcessorRos {
   std::string cloudTopic_;
   std::shared_ptr<SlamWrapper> slam_;
   rclcpp::Node* nh_;
+  rclcpp::executors::SingleThreadedExecutor* executor_;
 };
 
 }  // namespace o3d_slam

@@ -4,16 +4,17 @@ project(open3d_slam_ros)
 # Use C++17
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+add_compile_options(-g)
 
 # Source files
 set(SRC_FILES
   src/helpers_ros.cpp
-  #src/SlamMapInitializer.cpp
+  src/SlamMapInitializer.cpp
   src/SlamWrapperRos.cpp
-  #src/OnlineRangeDataProcessorRos.cpp
-  #src/creators.cpp
+  src/OnlineRangeDataProcessorRos.cpp
+  src/creators.cpp
   src/DataProcessorRos.cpp
-  #src/RosbagRangeDataProcessorRos.cpp
+  src/RosbagRangeDataProcessorRos.cpp
   src/Color.cpp
 )
 
@@ -53,6 +54,7 @@ include_directories(
 add_library(${PROJECT_NAME} ${SRC_FILES})
 ament_target_dependencies(${PROJECT_NAME}
   rclcpp
+  rosbag2_cpp
   std_msgs
   std_srvs
   geometry_msgs
@@ -88,25 +90,41 @@ install(TARGETS ${PROJECT_NAME}
 )
 
 # Executables
-#add_executable(mapping_node src/mapping_node.cpp)
-#target_link_libraries(mapping_node ${PROJECT_NAME})
+add_executable(mapping_node src/mapping_node.cpp)
+target_link_libraries(mapping_node ${PROJECT_NAME})
 
-#add_executable(adjacency_graph_example_node src/adjacency_graph_example_node.cpp)
-#target_link_libraries(adjacency_graph_example_node ${PROJECT_NAME})
+add_executable(adjacency_graph_example_node src/adjacency_graph_example_node.cpp)
+target_link_libraries(adjacency_graph_example_node ${PROJECT_NAME})
 
 # Install the library and executables
-#install(TARGETS mapping_node adjacency_graph_example_node
-#  DESTINATION lib/${PROJECT_NAME}
-#)
+install(TARGETS mapping_node adjacency_graph_example_node
+  DESTINATION lib/${PROJECT_NAME}
+)
 
 # Install header files
 install(DIRECTORY include/
   DESTINATION include
 )
 
+install(DIRECTORY launch
+  DESTINATION share/${PROJECT_NAME}
+)
+
+install(DIRECTORY data
+  DESTINATION share/${PROJECT_NAME}
+)
+
+install(DIRECTORY param
+  DESTINATION share/${PROJECT_NAME}
+)
+
+install(DIRECTORY rviz
+  DESTINATION share/${PROJECT_NAME}
+)
+
 # Export dependencies
 ament_export_targets(export_${PROJECT_NAME} HAS_LIBRARY_TARGET)
-ament_export_dependencies(rclcpp std_msgs std_srvs geometry_msgs nav_msgs tf2 tf2_ros tf2_eigen tf2_geometry_msgs sensor_msgs Eigen3 Open3D open3d_slam open3d_slam_lua_io open3d_slam_msgs open3d_conversions interactive_markers visualization_msgs)
+ament_export_dependencies(rclcpp rosbag2_cpp std_msgs std_srvs geometry_msgs nav_msgs tf2 tf2_ros tf2_eigen tf2_geometry_msgs sensor_msgs Eigen3 Open3D open3d_slam open3d_slam_lua_io open3d_slam_msgs open3d_conversions interactive_markers visualization_msgs)
 
 # Setup testing
 if(BUILD_TESTING)
