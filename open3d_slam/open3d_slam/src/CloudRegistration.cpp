@@ -80,6 +80,22 @@ std::unique_ptr<RegistrationIcpPointToPoint> createPointToPointIcp(const CloudRe
   return std::move(ret);
 }
 ////////////////////////////////
+/////// Colord
+////////////////////////////////
+RegistrationIcpPointToPoint::RegistrationResult RegistrationIcpColored::registerClouds(const PointCloud& source,
+                                                                                            const PointCloud& target,
+                                                                                            const Transform& init) const {
+  return RegistrationICP(source, target, maxCorrespondenceDistance_, init.matrix(), TransformationEstimationForColoredICP(),
+                         icpConvergenceCriteria_);
+}
+
+std::unique_ptr<RegistrationIcpColored> createColoredIcp(const CloudRegistrationParameters& p) {
+  auto ret = std::make_unique<RegistrationIcpColored>();
+  ret->maxCorrespondenceDistance_ = p.icp_.maxCorrespondenceDistance_;
+  ret->icpConvergenceCriteria_.max_iteration_ = p.icp_.maxNumIter_;
+  return std::move(ret);
+}
+////////////////////////////////
 /////// factory
 ////////////////////////////////
 std::unique_ptr<CloudRegistration> cloudRegistrationFactory(const CloudRegistrationParameters& p) {
@@ -89,6 +105,9 @@ std::unique_ptr<CloudRegistration> cloudRegistrationFactory(const CloudRegistrat
     }
     case CloudRegistrationType::PointToPointIcp: {
       return createPointToPointIcp(p);
+    }
+    case CloudRegistrationType::ColoredIcp: {
+      return createColoredIcp(p);
     }
     case CloudRegistrationType::GeneralizedIcp: {
       return createGeneralizedIcp(p);

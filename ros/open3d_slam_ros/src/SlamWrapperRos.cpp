@@ -186,9 +186,7 @@ void SlamWrapperRos::loadParametersAndInitialize() {
   nh_->declare_parameter("map_saving_folder", folderPath_);
   mapSavingFolderPath_ = nh_->get_parameter("map_saving_folder").as_string();
 
-  //nh_->declare_parameter("parameter_folder_path", "");
   const std::string paramFolderPath = nh_->get_parameter("parameter_folder_path").as_string();
-  //nh_->declare_parameter("parameter_filename", "");
   const std::string paramFilename = nh_->get_parameter("parameter_filename").as_string();
   SlamParameters params;
   io_lua::loadParameters(paramFolderPath, paramFilename, &params_);

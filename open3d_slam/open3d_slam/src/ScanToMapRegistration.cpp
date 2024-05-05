@@ -69,6 +69,9 @@ bool ScanToMapIcp::isMergeScanValid(const PointCloud& in) const {
     case ScanToMapRegistrationType::PointToPointIcp: {
       return true;
     }
+    case ScanToMapRegistrationType::ColoredIcp: {
+      return in.HasNormals() || in.HasColors();
+    }
     case ScanToMapRegistrationType::GeneralizedIcp: {
       return in.HasCovariances() || in.HasNormals();
     }
@@ -92,6 +95,7 @@ std::unique_ptr<ScanToMapRegistration> scanToMapRegistrationFactory(const Mapper
   switch (p.scanMatcher_.scanToMapRegType_) {
     case ScanToMapRegistrationType::PointToPlaneIcp:
     case ScanToMapRegistrationType::GeneralizedIcp:
+    case ScanToMapRegistrationType::ColoredIcp:
     case ScanToMapRegistrationType::PointToPointIcp: {
       return createScanToMapIcp(p);
     }
@@ -111,6 +115,10 @@ CloudRegistrationParameters toCloudRegistrationType(const ScanToMapRegistrationP
     }
     case ScanToMapRegistrationType::PointToPointIcp: {
       retVal.regType_ = CloudRegistrationType::PointToPointIcp;
+      break;
+    }
+    case ScanToMapRegistrationType::ColoredIcp: {
+      retVal.regType_ = CloudRegistrationType::ColoredIcp;
       break;
     }
     case ScanToMapRegistrationType::GeneralizedIcp: {

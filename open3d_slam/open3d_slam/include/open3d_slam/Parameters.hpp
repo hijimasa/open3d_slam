@@ -34,19 +34,21 @@ struct Parameters {
   }
 };
 
-enum class CloudRegistrationType : int { PointToPlaneIcp, PointToPointIcp, GeneralizedIcp };
+enum class CloudRegistrationType : int { PointToPlaneIcp, PointToPointIcp, ColoredIcp, GeneralizedIcp };
 
 static const std::map<std::string, CloudRegistrationType> CloudRegistrationStringToEnumMap{
     {"PointToPlaneIcp", CloudRegistrationType::PointToPlaneIcp},
     {"PointToPointIcp", CloudRegistrationType::PointToPointIcp},
-    {"GeneralizedIcp", CloudRegistrationType::GeneralizedIcp}};
+    {"ColoredIcp",       CloudRegistrationType::ColoredIcp},
+    {"GeneralizedIcp",  CloudRegistrationType::GeneralizedIcp}};
 
-enum class ScanToMapRegistrationType : int { PointToPlaneIcp, PointToPointIcp, GeneralizedIcp };
+enum class ScanToMapRegistrationType : int { PointToPlaneIcp, PointToPointIcp, ColoredIcp, GeneralizedIcp };
 
 static const std::map<std::string, ScanToMapRegistrationType> ScanToMapRegistrationStringToEnumMap{
     {"PointToPlaneIcp", ScanToMapRegistrationType::PointToPlaneIcp},
     {"PointToPointIcp", ScanToMapRegistrationType::PointToPointIcp},
-    {"GeneralizedIcp", ScanToMapRegistrationType::GeneralizedIcp}};
+    {"ColoredIcp",       ScanToMapRegistrationType::ColoredIcp},
+    {"GeneralizedIcp",  ScanToMapRegistrationType::GeneralizedIcp}};
 
 struct ScanCroppingParameters {
   double croppingMinZ_ = -10.0;

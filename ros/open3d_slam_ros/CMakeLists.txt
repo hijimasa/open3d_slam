@@ -38,7 +38,7 @@ find_package(Eigen3 REQUIRED)
 find_package(Boost REQUIRED COMPONENTS serialization filesystem system program_options)
 find_package(OpenMP QUIET)
 find_package(visualization_msgs REQUIRED)
-find_package(Open3D REQUIRED) # Ensure Open3D or a wrapper is available as a ROS 2 package
+find_package(Open3D 0.18.0 REQUIRED) # Ensure Open3D or a wrapper is available as a ROS 2 package
 find_package(open3d_slam REQUIRED)
 find_package(open3d_slam_lua_io REQUIRED)
 find_package(open3d_slam_msgs REQUIRED)

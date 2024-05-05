@@ -8,6 +8,7 @@
 #pragma once
 #include <Eigen/Dense>
 #include "open3d/pipelines/registration/GeneralizedICP.h"
+#include "open3d/pipelines/registration/ColoredICP.h"
 #include "open3d/pipelines/registration/Registration.h"
 
 #include "open3d_slam/Parameters.hpp"
@@ -46,6 +47,17 @@ class RegistrationIcpPointToPoint : public CloudRegistration {
   using RegistrationResult = open3d::pipelines::registration::RegistrationResult;
   RegistrationIcpPointToPoint() = default;
   ~RegistrationIcpPointToPoint() override = default;
+  RegistrationResult registerClouds(const PointCloud& source, const PointCloud& target, const Transform& init) const final;
+
+  double maxCorrespondenceDistance_ = 1.0;
+  open3d::pipelines::registration::ICPConvergenceCriteria icpConvergenceCriteria_;
+};
+
+class RegistrationIcpColored : public CloudRegistration {
+ public:
+  using RegistrationResult = open3d::pipelines::registration::RegistrationResult;
+  RegistrationIcpColored() = default;
+  ~RegistrationIcpColored() override = default;
   RegistrationResult registerClouds(const PointCloud& source, const PointCloud& target, const Transform& init) const final;
 
   double maxCorrespondenceDistance_ = 1.0;
