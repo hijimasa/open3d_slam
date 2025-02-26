@@ -36,3 +36,11 @@ If you find this work useful, or use it for your research, please consider citin
   organization={ETH Zurich, Robotic Systems Lab}
 }
 ```
+
+## Memo
+
+### Convert ROS 1 rosbag to ROS 2
+```
+pip install rosbags
+rosbags-convert --src src/open3d_slam/ros/open3d_slam_ros/data/wheeled_robot_large_outdoor_area.bag --dst src/open3d_slam/ros/open3d_slam_ros/data/wheeled_robot_large_outdoor_area
+```
