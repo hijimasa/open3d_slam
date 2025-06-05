@@ -24,7 +24,7 @@ params.map_initializer.pcd_file_path = ""
 params.map_initializer.init_pose.x = 0.0
 params.map_initializer.init_pose.y = 0.0
 params.map_initializer.init_pose.z = 0.0
-params.map_initializer.init_pose.roll = 0.0
+params.map_initializer.init_pose.roll = 0.0 -- radians
 params.map_initializer.init_pose.pitch = 0.0
 params.map_initializer.init_pose.yaw = 0.0
 
